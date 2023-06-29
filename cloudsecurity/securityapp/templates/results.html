@@ -13,50 +13,42 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-4">
-                <div class="card {% if img_urls %}bg-success{% else %}bg-danger{% endif %}">
+                <div class="card {% if xss_results %}bg-success{% else %}bg-danger{% endif %}">
                     <div class="card-header">
-                        Imágenes
+                        <span class="result-title">Resultados de XSStrapy</span>
                     </div>
                     <div class="card-body">
-                        <ul>
-                            {% for img_url in img_urls %}
-                                <li>{{ img_url }}</li>
-                            {% empty %}
-                                <li>No se encontraron imágenes.</li>
-                            {% endfor %}
-                        </ul>
+                        {% if xss_results %}
+                            <ul class="result-list">
+                                {% for result in xss_results %}
+                                    <li class="result-list-item">{{ result }}</li>
+                                {% empty %}
+                                    <li class="result-list-item">No se encontraron resultados de XSStrapy.</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="result-list-item">No se encontraron resultados de XSStrapy.</div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card {% if forms %}bg-success{% else %}bg-danger{% endif %}">
+                <div class="card {% if scrapy_results %}bg-success{% else %}bg-danger{% endif %}">
                     <div class="card-header">
-                        Formularios
+                        <span class="result-title">Resultados de Scrapy</span>
                     </div>
                     <div class="card-body">
-                        <ul>
-                            {% for form in forms %}
-                                <li>{{ form }}</li>
-                            {% empty %}
-                                <li>No se encontraron formularios.</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card {% if links %}bg-success{% else %}bg-danger{% endif %}">
-                    <div class="card-header">
-                        Enlaces
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            {% for link in links %}
-                                <li>{{ link }}</li>
-                            {% empty %}
-                                <li>No se encontraron enlaces.</li>
-                            {% endfor %}
-                        </ul>
+                        {% if scrapy_results %}
+                            <ul class="result-list">
+                                {% for result in scrapy_results %}
+                                    <li class="result-list-item">{{ result }}</li>
+                                {% empty %}
+                                    <li class="result-list-item">No se encontraron resultados de Scrapy.</li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="result-list-item">No se encontraron resultados de Scrapy.</div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

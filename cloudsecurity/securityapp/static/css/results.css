@@ -18,3 +18,21 @@
     background-repeat: repeat;
     background-size: cover;
 }
+
+.result-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.result-list {
+    list-style: none;
+    padding: 0;
+}
+.result-list-item {
+    margin-bottom: 5px;
+}
+.success {
+    color: green;
+}
+.danger {
+    color: red;
+}

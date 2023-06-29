@@ -1,7 +1,10 @@
 import scrapy
-from scrapy.crawler import CrawlerProcess
+from securityapp.xsscraping import xsscraping_process
+from scrapy.crawler import CrawlerRunner
+from scrapy.utils.log import configure_logging
 from django.shortcuts import render
 from validators import url as validate_url
+from twisted.internet import reactor, defer
 
 class MySpider(scrapy.Spider):
     name = 'myspider'
@@ -18,10 +21,11 @@ class MySpider(scrapy.Spider):
         for link in response.xpath('//a/@href').getall():
             yield response.follow(link, callback=self.parse)
 
+@defer.inlineCallbacks
 def run_spider(url):
-    process = CrawlerProcess()
-    process.crawl(MySpider, url=url)
-    process.start()
+    runner = CrawlerRunner()
+    yield runner.crawl(MySpider, url=url)
+    reactor.stop()
 
 def scrape(request):
     if request.method == 'POST':
@@ -33,8 +37,13 @@ def scrape(request):
 
         # Realizar el proceso de Xsscraping utilizando la URL proporcionada
         xsscraping_result = xsscraping_process(url)
-        # Hacer algo con el resultado del proceso de Xsscraping
 
-        return render(request, 'scrape.html', {'result': xsscraping_result})
+        # Realizar el proceso de Scrapy utilizando la URL proporcionada
+        configure_logging()
+        reactor.callFromThread(run_spider, url)
+        reactor.run()
+
+        # Renderizar la página de resultados
+        return render(request, 'results.html', {'xss_results': xsscraping_result})
 
     return render(request, 'scrape.html')

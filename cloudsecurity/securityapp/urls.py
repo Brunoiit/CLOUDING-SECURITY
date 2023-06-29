@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import home
+from securityapp.views import scrape
 
 urlpatterns = [
-    path('', home, name='home'),
+    path('', scrape, name='scrape'),
 ]

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from .scrapers import XXScrapyScraper, SQLInjectionScraper
+from .xsscraping import XXScrapyScraper, SQLInjectionScraper
 from .forms import ScrapeForm
 import validators
 

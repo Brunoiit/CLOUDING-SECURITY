@@ -37,4 +37,7 @@ if %errorlevel% neq 0 (
 )
 
 echo Dependencias instaladas correctamente.
+echo iniciando el programa.
+cd .\cloudsecurity\
+scrapy crawl cloudspider
 pause

@@ -5,6 +5,8 @@ from scrapy.utils.log import configure_logging
 from django.shortcuts import render
 from validators import url as validate_url
 from twisted.internet import reactor, defer
+from twisted.internet.protocol import ProcessProtocol
+import sys
 
 class MySpider(scrapy.Spider):
     name = 'myspider'
@@ -21,11 +23,21 @@ class MySpider(scrapy.Spider):
         for link in response.xpath('//a/@href').getall():
             yield response.follow(link, callback=self.parse)
 
-@defer.inlineCallbacks
+class ScrapingProtocol(ProcessProtocol):
+    def __init__(self, deferred):
+        self.deferred = deferred
+
+    def processEnded(self, reason):
+        self.deferred.callback(None)
+
 def run_spider(url):
+    deferred = defer.Deferred()
+    configure_logging()
     runner = CrawlerRunner()
-    yield runner.crawl(MySpider, url=url)
-    reactor.stop()
+    d = runner.crawl(MySpider, url=url)
+    d.addBoth(lambda _: reactor.stop())
+    reactor.spawnProcess(ScrapingProtocol(deferred), sys.executable, ['scrapy', 'crawl', 'myspider'])
+    return deferred
 
 def scrape(request):
     if request.method == 'POST':
@@ -39,11 +51,9 @@ def scrape(request):
         xsscraping_result = xsscraping_process(url)
 
         # Realizar el proceso de Scrapy utilizando la URL proporcionada
-        configure_logging()
-        reactor.callFromThread(run_spider, url)
-        reactor.run()
+        deferred = run_spider(url)
+        deferred.addBoth(lambda _: render(request, 'results.html', {'xss_results': xsscraping_result}))
 
-        # Renderizar la página de resultados
-        return render(request, 'results.html', {'xss_results': xsscraping_result})
+        return deferred
 
     return render(request, 'scrape.html')

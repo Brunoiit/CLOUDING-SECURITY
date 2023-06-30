@@ -1,5 +1,14 @@
 @echo off
 
+echo Validando la existencia de tkinter...
+pip show tkinter > nul
+if %errorlevel% neq 0 (
+    echo Instalando tkinter...
+    pip install tkinter
+) else (
+    echo requests ya está instalado.
+)
+
 echo Validando la existencia de requests...
 pip show requests > nul
 if %errorlevel% neq 0 (

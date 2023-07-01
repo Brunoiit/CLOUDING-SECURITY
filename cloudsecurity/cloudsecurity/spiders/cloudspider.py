@@ -2,7 +2,7 @@ import scrapy
 
 class MySpider(scrapy.Spider):
     name = 'cloudspider'
-    start_urls = ['http://www.sapuyes-narino.gov.co/']
+    start_urls = ['http://quotes.toscrape.com/']
 
     def parse(self, response):
         # Extraer enlaces

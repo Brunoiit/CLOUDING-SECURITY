@@ -21,6 +21,6 @@ if %errorlevel% neq 0 (
 echo Dependencias instaladas correctamente.
 echo Iniciando arañas
 cd cloudsecurity
-scrapy runspider cloudspider.py
+scrapy crawl cloudspider
 
 pause

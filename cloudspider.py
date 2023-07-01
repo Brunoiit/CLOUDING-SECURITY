@@ -1,4 +1,5 @@
 import os
+import sys
 import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
@@ -25,27 +26,26 @@ class CloudSpider(scrapy.Spider):
             print(result)
 
 
-def start_scraping():
-    url = input("Ingrese la URL: ")
-
-    if url:
+def start_scraping(urls):
+    if urls:
         # Crear instancia del proceso de Scrapy
         process = CrawlerProcess()
 
+        # Configurar la araña y las URLs de inicio
+        spider = CloudSpider()
+        spider.start_urls = urls
+
         # Agregar la araña al proceso
-        process.crawl(CloudSpider, start_urls=[url])
+        process.crawl(spider)
 
         # Iniciar el proceso
         process.start()
-
-        # Obtener el objeto spider
-        spider = process.spider_loader.load("cloudspider")
-
-        # Exportar los resultados
-        spider.export_results()
     else:
-        print("URL vacía. Por favor, ingrese una URL válida.")
+        print("No se han proporcionado URLs. Por favor, ingrese al menos una URL válida.")
 
 
-# Iniciar el escaneo
-start_scraping()
+# Obtener las URLs pasadas como argumentos desde la línea de comandos
+urls = sys.argv[1:]
+
+# Iniciar el escaneo con las URLs proporcionadas
+start_scraping(urls)

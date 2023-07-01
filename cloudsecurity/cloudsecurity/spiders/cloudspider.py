@@ -1,7 +1,7 @@
 import scrapy
-from cloudsecurity.spiders.xsscrapy import XSSSpider
+from bs4 import BeautifulSoup
 
-class CloudSpider(XSSSpider):
+class CloudSpider(scrapy.Spider):
     name = 'cloudspider'
 
     def start_requests(self):
@@ -37,24 +37,6 @@ class CloudSpider(XSSSpider):
         }
 
     def format_html(self, html):
-        # Organizar el HTML en múltiples líneas para mayor legibilidad
-        lines = []
-        indent_level = 0
-        for char in html:
-            if char == '<':
-                lines.append('\t' * indent_level + char)
-                indent_level += 1
-            elif char == '>':
-                indent_level -= 1
-                lines[-1] += char
-                if lines[-1].startswith('</'):
-                    lines[-1] += '\n'
-            elif char == '\n':
-                pass
-            else:
-                if not lines[-1].endswith('\n'):
-                    lines[-1] += '\n'
-                lines.append('\t' * indent_level + char)
-
-        formatted_html = ''.join(lines)
+        soup = BeautifulSoup(html, 'html.parser')
+        formatted_html = soup.prettify()
         return formatted_html

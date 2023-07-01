@@ -19,7 +19,5 @@ if %errorlevel% neq 0 (
 )
 
 echo Dependencias instaladas correctamente.
-echo iniciando el programa.
-scrapy runspider cloudspider.py
-python xsscrapy.py -l urls.txt
+
 pause

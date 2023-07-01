@@ -3,7 +3,7 @@ import scrapy
 class MySpider(scrapy.Spider):
     name = 'my_spider'
     
-    start_urls = ['http://example.com']  # URL de inicio para el rastreo
+    start_urls = ['http://www.sapuyes-narino.gov.co/']  # URL de inicio para el rastreo
     
     def parse(self, response):
         # Extraer enlaces

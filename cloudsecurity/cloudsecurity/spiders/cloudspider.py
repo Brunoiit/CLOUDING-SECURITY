@@ -1,7 +1,4 @@
 import scrapy
-import logging
-logging.getLogger('scrapy').setLevel(logging.DEBUG)
-
 
 class MySpider(scrapy.Spider):
     name = 'cloudspider'

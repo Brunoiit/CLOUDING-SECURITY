@@ -1,6 +1,6 @@
 import scrapy
 
-class XsMySpider(scrapy.Spider):
+class MySpider(scrapy.Spider):
   name = 'cloudspider'
   start_urls = ['http://quotes.toscrape.com/']
 

@@ -1,6 +1,4 @@
 import os
-import tkinter as tk
-from tkinter import filedialog, messagebox
 import scrapy
 from scrapy.crawler import CrawlerProcess
 from scrapy.linkextractors import LinkExtractor
@@ -21,57 +19,33 @@ class CloudSpider(scrapy.Spider):
         for link in links:
             self.results.append(link.url)
 
-    def export_results(self, output_path):
-        # Guardar los resultados en un archivo de texto
-        with open(output_path, 'w') as file:
-            for result in self.results:
-                file.write(result + '\n')
+    def export_results(self):
+        # Mostrar los resultados en la consola
+        for result in self.results:
+            print(result)
 
 
 def start_scraping():
-    url = url_entry.get()
+    url = input("Ingrese la URL: ")
 
     if url:
-        # Obtener la ruta del archivo de salida
-        output_file = filedialog.asksaveasfilename(defaultextension=".txt", initialdir=os.path.expanduser("~/Desktop"))
+        # Crear instancia del proceso de Scrapy
+        process = CrawlerProcess()
 
-        if output_file:
-            # Crear instancia del proceso de Scrapy
-            process = CrawlerProcess(settings={
-                "FEEDS": {output_file: {"format": "jsonlines"}},
-            })
+        # Agregar la araña al proceso
+        process.crawl(CloudSpider, start_urls=[url])
 
-            # Agregar la araña al proceso
-            process.crawl(CloudSpider, start_urls=[url])
+        # Iniciar el proceso
+        process.start()
 
-            # Iniciar el proceso
-            process.start()
+        # Obtener el objeto spider
+        spider = process.spider_loader.load("cloudspider")
 
-            # Obtener el objeto spider
-            spider = process.spider_loader.load("cloudspider")
-
-            # Exportar los resultados
-            spider.export_results(output_file)
-
-            # Mostrar mensaje de finalización
-            messagebox.showinfo("Finalizado", "El escaneo ha sido completado. Los resultados se han guardado en {}".format(output_file))
-        else:
-            messagebox.showwarning("Ruta de salida no seleccionada", "No se ha seleccionado una ruta de salida.")
+        # Exportar los resultados
+        spider.export_results()
     else:
-        messagebox.showwarning("URL Vacía", "Por favor, ingresa una URL válida.")
+        print("URL vacía. Por favor, ingrese una URL válida.")
 
-# Crear la ventana principal
-window = tk.Tk()
-window.title("Cloud Security Scanner")
 
-# Crear y posicionar los elementos de la interfaz
-url_label = tk.Label(window, text="URL:")
-url_label.pack()
-url_entry = tk.Entry(window)
-url_entry.pack()
-
-start_button = tk.Button(window, text="Iniciar escaneo", command=start_scraping)
-start_button.pack()
-
-# Ejecutar la ventana principal
-window.mainloop()
+# Iniciar el escaneo
+start_scraping()

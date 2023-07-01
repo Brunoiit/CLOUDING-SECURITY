@@ -48,7 +48,7 @@ def start_scraping():
             process.start()
 
             # Obtener el objeto spider
-            spider = process.spider_loader.load("cloudspider")
+            spider = process.spider
 
             # Exportar los resultados
             spider.export_results(output_file)

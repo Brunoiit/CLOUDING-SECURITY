@@ -5,7 +5,6 @@ pip show tkinter > nul
 if %errorlevel% neq 0 (
     echo Instalando tkinter...
     pip install tkinter
-    @REM pip install Twisted==16.4.1
 ) else (
     echo requests ya está instalado.
 )

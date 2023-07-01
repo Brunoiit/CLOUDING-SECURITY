@@ -20,6 +20,7 @@ if %errorlevel% neq 0 (
 
 echo Dependencias instaladas correctamente.
 echo Iniciando arañas
-scrapy runspider cloudspider.py -s ITEM_PIPELINES="{'my_project.pipelines.TextWriterPipeline': 1}"
+cd cloudsecurity
+scrapy runspider cloudspider.py
 
 pause

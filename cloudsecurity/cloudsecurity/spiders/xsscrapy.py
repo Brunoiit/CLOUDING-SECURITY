@@ -1,5 +1,5 @@
 class MySpider(scrapy.Spider):
-    name = 'my_spider'
+    name = 'cloudspider'
     start_urls = ['http://www.sapuyes-narino.gov.co/']
 
     # Definir la salida como archivo JSON

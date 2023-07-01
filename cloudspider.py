@@ -1,22 +1,19 @@
 import scrapy
 
-class WebSpider(scrapy.Spider):
-    name = 'cloudspider'
-    start_urls = ['http://www.sapuyes-narino.gov.co/']  # Replace with your target URL
-
-    def parse(self, response):
-        # Extract URLs from the current page
-        urls = response.css('a::attr(href)').getall()
-
-        # Yield a new Request for each URL
-        for url in urls:
-            yield scrapy.Request(url, callback=self.parse)
-
 class MySpider(scrapy.Spider):
-    name = "my_spider"
+    name = 'my_spider'
+    
+    start_urls = ['http://example.com']  # URL de inicio para el rastreo
+    
+    def parse(self, response):
+        # Extraer enlaces
+        for link in response.css('a::attr(href)').getall():
+            yield scrapy.Request(response.urljoin(link), callback=self.parse)
 
-    def start_requests(self):
-        with open('urls.txt', 'r') as f:
-            urls = f.read().splitlines()
-        for url in urls:
-            yield scrapy.Request(url, callback=self.parse)
+        # Extraer contenidos de formulario
+        for form in response.css('form'):
+            yield {
+                'action': form.css('::attr(action)').get(),
+                'method': form.css('::attr(method)').get(),
+                'inputs': form.css('input::attr(name)').getall(),
+            }

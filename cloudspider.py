@@ -31,12 +31,11 @@ def start_scraping(urls):
         # Crear instancia del proceso de Scrapy
         process = CrawlerProcess()
 
-        # Configurar la araña y las URLs de inicio
-        spider = CloudSpider()
-        spider.start_urls = urls
+        # Configurar las URLs de inicio
+        CloudSpider.start_urls = urls
 
         # Agregar la araña al proceso
-        process.crawl(spider)
+        process.crawl(CloudSpider)
 
         # Iniciar el proceso
         process.start()

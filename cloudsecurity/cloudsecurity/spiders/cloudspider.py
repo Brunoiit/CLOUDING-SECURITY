@@ -29,7 +29,32 @@ class CloudSpider(XSSSpider):
             }
 
         # Extraer todo el HTML de la página
+        html = response.body.decode('utf-8')
+        formatted_html = self.format_html(html)
         yield {
             'tag': 'html',
-            'html': response.body.decode('utf-8'),
+            'html': formatted_html,
         }
+
+    def format_html(self, html):
+        # Organizar el HTML en múltiples líneas para mayor legibilidad
+        lines = []
+        indent_level = 0
+        for char in html:
+            if char == '<':
+                lines.append('\t' * indent_level + char)
+                indent_level += 1
+            elif char == '>':
+                indent_level -= 1
+                lines[-1] += char
+                if lines[-1].startswith('</'):
+                    lines[-1] += '\n'
+            elif char == '\n':
+                pass
+            else:
+                if not lines[-1].endswith('\n'):
+                    lines[-1] += '\n'
+                lines.append('\t' * indent_level + char)
+
+        formatted_html = ''.join(lines)
+        return formatted_html

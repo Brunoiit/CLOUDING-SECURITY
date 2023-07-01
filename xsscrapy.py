@@ -1,7 +1,8 @@
-with open('urls.txt', 'r') as file:
-    urls = file.readlines()
-    
-for url in urls:
-    # Assuming process(url) is the function which handles the URL analysis
-    # It will contain your XSS analysis code by XSSScrapy
-    process(url.strip())
+class MySpider(scrapy.Spider):
+    name = "my_spider"
+
+    def start_requests(self):
+        with open('urls.txt', 'r') as f:
+            urls = f.read().splitlines()
+        for url in urls:
+            yield scrapy.Request(url, callback=self.parse)
